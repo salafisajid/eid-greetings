@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Eid Greeting PRO FINAL</title>
+<title>Eid Greeting PRO FINAL V2</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
@@ -59,7 +59,7 @@ input,button{
 
 <body>
 
-<h2>🌙 Eid Greeting PRO FINAL</h2>
+<h2>🌙 Eid Greeting PRO FINAL V2</h2>
 
 <input id="name" placeholder="Apna naam likhein">
 <button onclick="generate()">Generate</button>
@@ -77,7 +77,7 @@ function getFontSize(name){
   return "18px";
 }
 
-/* 🚀 GENERATE FUNCTION */
+/* 🚀 GENERATE */
 function generate(){
 
   let name = document.getElementById("name").value.trim();
@@ -92,22 +92,22 @@ function generate(){
       style: "left:50%; top:60px; transform:translateX(-50%);"
     },
 
-    /* 🟢 GREEN (NO SPACE RULE) */
+    /* 🟢 GREEN */
     {
       bg: "green.jpg",
       style: "right:20px; bottom:55px; text-align:right;"
     },
 
-    /* ⚫ BLACK */
+    /* ⚫ BLACK (VERY TOP) */
     {
       bg: "black.jpg",
-      style: "left:50%; top:60px; transform:translateX(-50%);"
+      style: "left:50%; top:15px; transform:translateX(-50%);"
     },
 
-    /* 🕌 MOSQUE (BOTTOM CENTER) */
+    /* 🕌 MOSQUE (TOP SHIFTED) */
     {
       bg: "mosque.jpg",
-      style: "left:50%; bottom:5px; transform:translateX(-50%);"
+      style: "left:50%; top:25px; transform:translateX(-50%);"
     }
   ];
 
