@@ -18,56 +18,52 @@ body{
   text-align:center;
 }
 
-/* ===== FULL BIG HOME SCREEN FIX ===== */
+/* HOME SCREEN BIG */
 .header{
   min-height:100vh;
-  width:100%;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
-  padding:30px 15px;
+  padding:20px;
 }
 
 h1{
-  font-size:72px;   /* 🔥 BIGGER */
-  margin-bottom:10px;
+  font-size:70px;
+  margin:0;
 }
 
 .sub{
-  font-size:28px;   /* 🔥 BIGGER */
-  font-weight:600;
-  margin-bottom:10px;
+  font-size:28px;
+  margin-top:10px;
 }
 
 input{
-  width:95%;
-  max-width:650px;
-  padding:28px;
-  font-size:30px;
-  border-radius:14px;
+  width:90%;
+  max-width:600px;
+  padding:26px;
+  font-size:28px;
   border:none;
+  border-radius:12px;
   text-align:center;
-  margin-top:20px;
+  margin-top:25px;
 }
 
 .generate{
-  margin-top:25px;
-  padding:20px 55px;
-  font-size:26px;
+  margin-top:20px;
+  padding:18px 50px;
+  font-size:24px;
+  background:gold;
   border:none;
   border-radius:12px;
-  background:gold;
-  cursor:pointer;
   font-weight:bold;
+  cursor:pointer;
 }
 
-/* INFO BELOW BUTTON */
 .info{
-  margin-top:30px;
-  font-size:22px;   /* 🔥 BIGGER */
-  line-height:2;
-  opacity:0.95;
+  margin-top:25px;
+  font-size:22px;
+  line-height:1.8;
 }
 
 /* CARD */
@@ -119,28 +115,17 @@ input{
   width:60px;
 }
 
-.actions{
-  margin-bottom:30px;
-}
-
-button{
+.actions button{
   padding:10px 16px;
   margin:5px;
-  border-radius:8px;
   border:none;
-  cursor:pointer;
+  border-radius:8px;
   font-weight:bold;
+  cursor:pointer;
 }
 
-.download{
-  background:green;
-  color:white;
-}
-
-.share{
-  background:#25D366;
-  color:white;
-}
+.download{background:green;color:white;}
+.share{background:#25D366;color:white;}
 </style>
 </head>
 
@@ -150,14 +135,12 @@ button{
 <div class="header">
 
   <h1>🌙 Eid Mubarak</h1>
-
   <div class="sub">KULLIYATUR RASHIDAATIL ISLAMIYAH</div>
 
   <input id="name" placeholder="Apna naam likhein">
 
   <button class="generate" onclick="generate()">Generate Cards</button>
 
-  <!-- 🔥 NOW PROPERLY BIG + BELOW BUTTON -->
   <div class="info">
     📞 +91 87791 22931<br>
     🌐 www.raashidiyah.com
@@ -165,11 +148,18 @@ button{
 
 </div>
 
-<!-- OUTPUT -->
 <div id="output"></div>
 
 <script>
 
+/* ONLINE IMAGES (NO FILE NEEDED) */
+const designs = [
+  "https://images.unsplash.com/photo-1606925797300-0b8b5c3d4c0b?auto=format&fit=crop&w=600&q=80",
+  "https://images.unsplash.com/photo-1608889175123-8d8c8a0b5c8d?auto=format&fit=crop&w=600&q=80",
+  "https://images.unsplash.com/photo-1600195077903-1c7d1a1a6a5b?auto=format&fit=crop&w=600&q=80"
+];
+
+/* LANGUAGE */
 function isArabic(text){
   return /[\u0600-\u06FF]/.test(text);
 }
@@ -177,12 +167,11 @@ function isUrdu(text){
   return /[\u0600-\u06FF\u0750-\u077F]/.test(text);
 }
 
+/* GENERATE */
 function generate(){
 
   let name=document.getElementById("name").value.trim();
   if(!name) return alert("Naam likhein");
-
-  let designs=["eid.jpg","eid2.jpg","pink.jpg"];
 
   let html="";
 
@@ -196,7 +185,7 @@ function generate(){
     <div>
       <div class="card" id="card${i}" style="background-image:url('${bg}')">
         <div class="overlay">
-          <img src="logo.png" class="logo">
+          <img src="https://i.imgur.com/8QfQk5Q.png" class="logo">
           <div class="${fontClass}">${name}</div>
         </div>
       </div>
@@ -212,6 +201,7 @@ function generate(){
   document.getElementById("output").innerHTML=html;
 }
 
+/* HD DOWNLOAD */
 function downloadCard(id){
   let element=document.getElementById(id);
 
@@ -227,6 +217,7 @@ function downloadCard(id){
   });
 }
 
+/* SHARE */
 async function shareImage(id){
   let card=document.getElementById(id);
 
