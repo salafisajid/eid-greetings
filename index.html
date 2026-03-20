@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Vertical Eid Mubarak PRO</title>
+<title>Vertical Eid Name Generator</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
@@ -29,66 +29,72 @@ button{
   border:none;
   cursor:pointer;
   font-weight:bold;
+  background:gold;
 }
-
-.generate{ background:gold; }
-.download{ background:green; color:white; }
-.share{ background:#25D366; color:white; }
 
 .card{
   width:320px;
-  height:560px;   /* VERTICAL */
+  height:560px;
   margin:20px auto;
   border-radius:18px;
   background-size:cover;
   background-position:center;
-  overflow:hidden;
   position:relative;
+  overflow:hidden;
 }
 
 .overlay{
   position:absolute;
   inset:0;
-  background:rgba(0,0,0,0.55);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  padding:15px;
+  background:rgba(0,0,0,0.45);
 }
 
-.logo{
-  width:70px;
-  margin-bottom:10px;
-}
-
-.text{
-  font-size:22px;
-  margin:10px 0;
+/* NAME CENTER */
+.name{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  font-size:28px;
+  font-weight:bold;
   color:#FFD700;
+  text-shadow:2px 2px 6px black;
   text-align:center;
+  width:90%;
 }
 
-.inst{
+/* LOGO TOP */
+.logo{
+  position:absolute;
+  top:15px;
+  left:50%;
+  transform:translateX(-50%);
+  width:70px;
+}
+
+/* WEBSITE BOTTOM */
+.website{
+  position:absolute;
+  bottom:15px;
+  left:50%;
+  transform:translateX(-50%);
   font-size:12px;
-  opacity:0.8;
-  margin-top:10px;
+  color:yellow;
+  opacity:0.9;
 }
 </style>
 </head>
 
 <body>
 
-<h1>🌙 Eid Mubarak (VERTICAL PRO)</h1>
+<h2>🌙 Vertical Eid Name Generator</h2>
 
-<p>KULLIYATUR RAASHIDATIL ISLAMIYAH</p>
-
-<input type="text" id="name" placeholder="Apna naam likhein">
+<input id="name" placeholder="Apna naam likhein">
 <br>
 
-<button class="generate" onclick="generate()">Generate</button>
+<button onclick="generate()">Generate</button>
 
-<div id="cardsContainer"></div>
+<div id="output"></div>
 
 <script>
 
@@ -98,66 +104,33 @@ function generate(){
   if(!name) return alert("Naam likhein");
 
   let designs=[
-    {
-      bg:"https://i.ibb.co/4f3YdK1/mosque.jpg",
-      text:`🌙 Eid Mubarak<br>${name}`
-    },
-    {
-      bg:"https://i.ibb.co/0jH0z9H/moon.jpg",
-      text:`Eid Mubarak ${name}<br>Allah aapko khush rakhe`
-    },
-    {
-      bg:"https://i.ibb.co/z5Z9b6P/islamic.jpg",
-      text:`🌙 Warm Wishes<br>${name}`
-    }
+    "blue.jpg",
+    "black.jpg",
+    "green.jpg",
+    "mosque.jpg"
   ];
 
-  let output="";
+  let html="";
 
-  designs.forEach((d,i)=>{
+  designs.forEach(bg=>{
 
-    output+=`
-    <div class="card" id="card${i}" style="background-image:url('${d.bg}')">
+    html+=`
+    <div class="card" style="background-image:url('${bg}')">
 
       <div class="overlay">
 
         <img src="logo.png" class="logo">
 
-        <div class="text">${d.text}</div>
+        <div class="name">${name}</div>
 
-        <div class="inst">KULLIYATUR RAASHIDATIL ISLAMIYAH</div>
-
-        <button class="download" onclick="downloadCard('card${i}')">
-          Download
-        </button>
-
-        <button class="share" onclick="shareWhatsApp('${name}')">
-          WhatsApp
-        </button>
+        <div class="website">www.raashidiyah.com</div>
 
       </div>
 
     </div>`;
   });
 
-  document.getElementById("cardsContainer").innerHTML=output;
-}
-
-/* 📸 DOWNLOAD */
-function downloadCard(id){
-  html2canvas(document.getElementById(id)).then(canvas=>{
-    let a=document.createElement("a");
-    a.download="eid-vertical.png";
-    a.href=canvas.toDataURL();
-    a.click();
-  });
-}
-
-/* 📲 SHARE */
-function shareWhatsApp(name){
-  let text=`🌙 Eid Mubarak from ${name}\nKULLIYATUR RAASHIDATIL ISLAMIYAH`;
-  let url="https://wa.me/?text="+encodeURIComponent(text);
-  window.open(url,"_blank");
+  document.getElementById("output").innerHTML=html;
 }
 
 </script>
