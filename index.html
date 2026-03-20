@@ -16,44 +16,53 @@ body{
   font-family:Segoe UI;
   background:#0c1a1a;
   color:white;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  min-height:100vh;
   text-align:center;
 }
 
-/* FIRST SCREEN */
+/* ===== BIG HOME SCREEN ===== */
 .header{
-  padding:60px 20px;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
 }
 
 h1{
-  font-size:42px;
-  margin-bottom:10px;
+  font-size:80px;
+  margin:0;
 }
 
 input{
   width:90%;
-  max-width:500px;
-  padding:22px;
-  font-size:24px;
-  border-radius:12px;
+  max-width:600px;
+  padding:26px;
+  font-size:28px;
   border:none;
+  border-radius:12px;
   text-align:center;
-  margin-top:10px;
+  margin-top:20px;
 }
 
 .generate{
   margin-top:20px;
-  padding:16px 30px;
-  font-size:20px;
+  padding:18px 50px;
+  font-size:24px;
+  background:gold;
   border:none;
   border-radius:12px;
-  background:gold;
-  cursor:pointer;
   font-weight:bold;
+  cursor:pointer;
+}
+
+/* CONTACT BELOW BUTTON */
+.info{
+  margin-top:25px;
+  font-size:22px;
+  font-weight:600;
+  line-height:1.8;
+  color:#FFD700;
 }
 
 /* CARD */
@@ -85,7 +94,6 @@ input{
   color:#FFD700;
   text-shadow:2px 2px 6px black;
   width:90%;
-  text-align:center;
 }
 
 /* ARABIC */
@@ -111,17 +119,13 @@ input{
 }
 
 /* BUTTONS */
-.actions{
-  margin-top:5px;
-}
-
-button{
+.actions button{
   padding:10px 16px;
   margin:5px;
-  border-radius:8px;
   border:none;
-  cursor:pointer;
+  border-radius:8px;
   font-weight:bold;
+  cursor:pointer;
 }
 
 .download{
@@ -143,21 +147,19 @@ button{
 
   <h1>🌙 Eid Mubarak</h1>
 
-  <p style="font-size:18px; margin-top:-5px;">
+  <p style="font-size:24px; font-weight:600;">
     KULLIYATUR RASHIDAATIL ISLAMIYAH
-  </p>
-
-  <p style="font-size:16px; color:#FFD700;">
-    📞 +91 87791 22931
   </p>
 
   <input id="name" placeholder="Apna naam likhein">
 
-  <p style="font-size:14px; margin-top:8px; opacity:0.8;">
-    www.raashidiyah.com
-  </p>
-
   <button class="generate" onclick="generate()">Generate Cards</button>
+
+  <!-- BIG INFO BELOW BUTTON -->
+  <div class="info">
+    📞 +91 87791 22931<br>
+    🌐 www.raashidiyah.com
+  </div>
 
 </div>
 
@@ -166,7 +168,7 @@ button{
 
 <script>
 
-/* LANGUAGE CHECK */
+/* CHECK LANGUAGE */
 function isArabic(text){
   return /[\u0600-\u06FF]/.test(text);
 }
@@ -217,7 +219,6 @@ function downloadCard(id){
   html2canvas(element,{
     scale:3,
     useCORS:true,
-    allowTaint:true,
     backgroundColor:null
   }).then(canvas=>{
     let a=document.createElement("a");
@@ -227,14 +228,13 @@ function downloadCard(id){
   });
 }
 
-/* NATIVE SHARE (ALL APPS) */
+/* SHARE */
 async function shareImage(id){
   let card=document.getElementById(id);
 
   let canvas=await html2canvas(card,{
     scale:3,
-    useCORS:true,
-    backgroundColor:null
+    useCORS:true
   });
 
   canvas.toBlob(async (blob)=>{
@@ -242,19 +242,16 @@ async function shareImage(id){
     let file=new File([blob],"eid.png",{type:"image/png"});
 
     if(navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
-      try{
-        await navigator.share({
-          title:"Eid Mubarak",
-          text:"🌙 Eid Mubarak",
-          files:[file]
-        });
-      }catch(e){}
+      await navigator.share({
+        title:"Eid Mubarak",
+        text:"🌙 Eid Mubarak",
+        files:[file]
+      });
     }else{
       let a=document.createElement("a");
       a.href=URL.createObjectURL(blob);
       a.download="eid.png";
       a.click();
-      alert("Share supported nahi hai, image download ho gayi");
     }
 
   });
