@@ -6,7 +6,6 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-<!-- FONTS -->
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
 
@@ -19,26 +18,33 @@ body{
   text-align:center;
 }
 
-/* ===== HOME SCREEN BIG ===== */
+/* ===== FULL BIG HOME SCREEN FIX ===== */
 .header{
   min-height:100vh;
+  width:100%;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
-  padding:40px 20px;
+  padding:30px 15px;
 }
 
 h1{
-  font-size:56px;
+  font-size:72px;   /* 🔥 BIGGER */
+  margin-bottom:10px;
+}
+
+.sub{
+  font-size:28px;   /* 🔥 BIGGER */
+  font-weight:600;
   margin-bottom:10px;
 }
 
 input{
   width:95%;
-  max-width:600px;
-  padding:26px;
-  font-size:26px;
+  max-width:650px;
+  padding:28px;
+  font-size:30px;
   border-radius:14px;
   border:none;
   text-align:center;
@@ -47,8 +53,8 @@ input{
 
 .generate{
   margin-top:25px;
-  padding:18px 45px;
-  font-size:22px;
+  padding:20px 55px;
+  font-size:26px;
   border:none;
   border-radius:12px;
   background:gold;
@@ -56,15 +62,15 @@ input{
   font-weight:bold;
 }
 
-/* MOBILE + WEBSITE BELOW BUTTON */
+/* INFO BELOW BUTTON */
 .info{
-  margin-top:25px;
-  font-size:16px;
-  line-height:1.8;
-  opacity:0.9;
+  margin-top:30px;
+  font-size:22px;   /* 🔥 BIGGER */
+  line-height:2;
+  opacity:0.95;
 }
 
-/* ===== CARD ===== */
+/* CARD */
 .card{
   width:320px;
   height:560px;
@@ -82,7 +88,6 @@ input{
   background:rgba(0,0,0,0.35);
 }
 
-/* NAME */
 .name{
   position:absolute;
   bottom:120px;
@@ -95,21 +100,18 @@ input{
   width:90%;
 }
 
-/* ARABIC */
 .arabic{
   font-family:'Amiri', serif;
   direction:rtl;
   font-size:32px;
 }
 
-/* URDU */
 .urdu{
   font-family:'Noto Nastaliq Urdu', serif;
   direction:rtl;
   font-size:30px;
 }
 
-/* LOGO */
 .logo{
   position:absolute;
   bottom:15px;
@@ -117,7 +119,6 @@ input{
   width:60px;
 }
 
-/* BUTTONS */
 .actions{
   margin-bottom:30px;
 }
@@ -145,21 +146,20 @@ button{
 
 <body>
 
-<!-- ===== HOME SCREEN ===== -->
+<!-- HOME SCREEN -->
 <div class="header">
 
   <h1>🌙 Eid Mubarak</h1>
 
-  <p style="font-size:20px;">
-    KULLIYATUR RASHIDAATIL ISLAMIYAH
-  </p>
+  <div class="sub">KULLIYATUR RASHIDAATIL ISLAMIYAH</div>
 
   <input id="name" placeholder="Apna naam likhein">
 
   <button class="generate" onclick="generate()">Generate Cards</button>
 
+  <!-- 🔥 NOW PROPERLY BIG + BELOW BUTTON -->
   <div class="info">
-    📞 +91 87791 22931 <br>
+    📞 +91 87791 22931<br>
     🌐 www.raashidiyah.com
   </div>
 
@@ -170,7 +170,6 @@ button{
 
 <script>
 
-/* LANGUAGE DETECTION */
 function isArabic(text){
   return /[\u0600-\u06FF]/.test(text);
 }
@@ -178,7 +177,6 @@ function isUrdu(text){
   return /[\u0600-\u06FF\u0750-\u077F]/.test(text);
 }
 
-/* GENERATE */
 function generate(){
 
   let name=document.getElementById("name").value.trim();
@@ -214,51 +212,41 @@ function generate(){
   document.getElementById("output").innerHTML=html;
 }
 
-/* HD DOWNLOAD */
 function downloadCard(id){
   let element=document.getElementById(id);
 
   html2canvas(element,{
     scale:3,
     useCORS:true,
-    allowTaint:true,
     backgroundColor:null
   }).then(canvas=>{
     let a=document.createElement("a");
-    a.download="eid-card-hd.png";
+    a.download="eid-card.png";
     a.href=canvas.toDataURL("image/png",1.0);
     a.click();
   });
 }
 
-/* NATIVE SHARE */
 async function shareImage(id){
   let card=document.getElementById(id);
 
-  let canvas=await html2canvas(card,{
-    scale:3,
-    useCORS:true,
-    backgroundColor:null
-  });
+  let canvas=await html2canvas(card,{scale:3, useCORS:true});
 
   canvas.toBlob(async (blob)=>{
 
     let file=new File([blob],"eid.png",{type:"image/png"});
 
     if(navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
-      try{
-        await navigator.share({
-          title:"Eid Mubarak",
-          text:"🌙 Eid Mubarak",
-          files:[file]
-        });
-      }catch(e){}
+      await navigator.share({
+        title:"Eid Mubarak",
+        text:"🌙 Eid Mubarak",
+        files:[file]
+      });
     }else{
       let a=document.createElement("a");
       a.href=URL.createObjectURL(blob);
       a.download="eid.png";
       a.click();
-      alert("Share supported nahi hai, image download ho gayi");
     }
 
   });
