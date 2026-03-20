@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Vertical Eid Name Generator</title>
+<title>Vertical Eid Generator</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
@@ -49,7 +49,7 @@ button{
   background:rgba(0,0,0,0.45);
 }
 
-/* NAME CENTER */
+/* NAME */
 .name{
   position:absolute;
   left:50%;
@@ -63,7 +63,7 @@ button{
   width:90%;
 }
 
-/* LOGO TOP */
+/* LOGO */
 .logo{
   position:absolute;
   top:15px;
@@ -72,7 +72,7 @@ button{
   width:70px;
 }
 
-/* WEBSITE BOTTOM */
+/* WEBSITE */
 .website{
   position:absolute;
   bottom:15px;
@@ -80,14 +80,31 @@ button{
   transform:translateX(-50%);
   font-size:12px;
   color:yellow;
-  opacity:0.9;
+}
+
+/* ACTION BUTTONS (OUTSIDE IMAGE AREA) */
+.actions{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin-top:5px;
+}
+
+.download{
+  background:green;
+  color:white;
+}
+
+.whatsapp{
+  background:#25D366;
+  color:white;
 }
 </style>
 </head>
 
 <body>
 
-<h2>🌙 Vertical Eid Name Generator</h2>
+<h2>🌙 Eid Vertical Generator</h2>
 
 <input id="name" placeholder="Apna naam likhein">
 <br>
@@ -112,25 +129,56 @@ function generate(){
 
   let html="";
 
-  designs.forEach(bg=>{
+  designs.forEach((bg,i)=>{
 
     html+=`
-    <div class="card" style="background-image:url('${bg}')">
+    
+    <div>
 
-      <div class="overlay">
+      <!-- CARD ONLY -->
+      <div class="card" id="card${i}" style="background-image:url('${bg}')">
 
-        <img src="logo.png" class="logo">
+        <div class="overlay">
 
-        <div class="name">${name}</div>
+          <img src="logo.png" class="logo">
 
-        <div class="website">www.raashidiyah.com</div>
+          <div class="name">${name}</div>
+
+          <div class="website">www.raashidiyah.com</div>
+
+        </div>
 
       </div>
 
-    </div>`;
+      <!-- BUTTONS OUTSIDE CARD -->
+      <div class="actions">
+        <button class="download" onclick="downloadCard('card${i}')">Download</button>
+        <button class="whatsapp" onclick="shareWhatsApp('${name}')">WhatsApp</button>
+      </div>
+
+    </div>
+    
+    `;
   });
 
   document.getElementById("output").innerHTML=html;
+}
+
+/* DOWNLOAD CLEAN IMAGE */
+function downloadCard(id){
+  html2canvas(document.getElementById(id)).then(canvas=>{
+    let a=document.createElement("a");
+    a.download="eid-card.png";
+    a.href=canvas.toDataURL("image/png");
+    a.click();
+  });
+}
+
+/* WHATSAPP SHARE */
+function shareWhatsApp(name){
+  let text=`🌙 Eid Mubarak from ${name}\nKulliyatur Raashidatil Islamiyah`;
+  let url="https://wa.me/?text="+encodeURIComponent(text);
+  window.open(url,"_blank");
 }
 
 </script>
