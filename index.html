@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Eid Greeting PRO MAX FINAL</title>
+<title>Eid Greeting PRO FINAL</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
@@ -19,7 +19,6 @@ input,button{
   margin:5px;
 }
 
-/* 📱 MAIN CARD */
 .card{
   position:relative;
   width:320px;
@@ -32,28 +31,21 @@ input,button{
   box-shadow:0 10px 25px rgba(0,0,0,0.6);
 }
 
-/* DRAG ITEMS */
-.item{
-  position:absolute;
-  cursor:grab;
-  user-select:none;
-}
-
-/* LOGO */
 .logo{
+  position:absolute;
   width:60px;
+  left:15px;
+  bottom:15px;
 }
 
-/* NAME */
 .name{
+  position:absolute;
   color:#FFD700;
   font-weight:bold;
   text-shadow:2px 2px 6px black;
   max-width:85%;
-  text-align:center;
 }
 
-/* WEBSITE */
 .website{
   position:absolute;
   bottom:10px;
@@ -67,7 +59,7 @@ input,button{
 
 <body>
 
-<h2>🌙 Eid Greeting PRO MAX FINAL</h2>
+<h2>🌙 Eid Greeting PRO FINAL</h2>
 
 <input id="name" placeholder="Apna naam likhein">
 <button onclick="generate()">Generate</button>
@@ -77,93 +69,77 @@ input,button{
 
 <script>
 
-let active=null,offsetX=0,offsetY=0;
-
-/* 🧠 FONT AUTO SIZE */
-function fontSize(name){
-  if(name.length<10) return "28px";
-  if(name.length<20) return "24px";
-  if(name.length<30) return "20px";
+/* FONT SIZE AUTO */
+function getFontSize(name){
+  if(name.length < 10) return "28px";
+  if(name.length < 20) return "24px";
+  if(name.length < 30) return "20px";
   return "18px";
 }
 
-/* 🚀 GENERATE */
+/* 🚀 GENERATE FUNCTION */
 function generate(){
 
-  let name=document.getElementById("name").value.trim();
+  let name = document.getElementById("name").value.trim();
   if(!name) return alert("Naam likhein");
 
-  let designs=["blue.jpg","green.jpg","black.jpg","mosque.jpg"];
+  let html = "";
 
-  let html="";
+  let designs = [
+    /* 🔵 BLUE */
+    {
+      bg: "blue.jpg",
+      style: "left:50%; top:60px; transform:translateX(-50%);"
+    },
 
-  designs.forEach(bg=>{
+    /* 🟢 GREEN (NO SPACE RULE) */
+    {
+      bg: "green.jpg",
+      style: "right:20px; bottom:55px; text-align:right;"
+    },
 
-    html+=`
-    <div class="card" style="background-image:url('${bg}')">
+    /* ⚫ BLACK */
+    {
+      bg: "black.jpg",
+      style: "left:50%; top:60px; transform:translateX(-50%);"
+    },
 
-      <img src="logo.png"
-        class="item logo"
-        style="left:15px;bottom:15px;"
-        onmousedown="dragStart(event)">
+    /* 🕌 MOSQUE (BOTTOM CENTER) */
+    {
+      bg: "mosque.jpg",
+      style: "left:50%; bottom:5px; transform:translateX(-50%);"
+    }
+  ];
 
-      <div class="item name"
-        style="left:50%;top:60%;transform:translateX(-50%);font-size:${fontSize(name)};"
-        onmousedown="dragStart(event)">
+  designs.forEach(d => {
+
+    html += `
+    <div class="card" style="background-image:url('${d.bg}')">
+
+      <img src="logo.png" class="logo">
+
+      <div class="name" style="${d.style}; font-size:${getFontSize(name)};">
         ${name}
       </div>
 
       <div class="website">www.raashidiyah.com</div>
 
-    </div>`;
+    </div>
+    `;
   });
 
-  document.getElementById("output").innerHTML=html;
+  document.getElementById("output").innerHTML = html;
 }
 
-/* 🖱️ DRAG SYSTEM (SAFE) */
-function dragStart(e){
-  active=e.target;
-  offsetX=e.offsetX;
-  offsetY=e.offsetY;
-  document.onmousemove=drag;
-  document.onmouseup=stop;
-}
-
-function drag(e){
-  if(!active) return;
-
-  let parent=active.parentElement;
-  let rect=parent.getBoundingClientRect();
-
-  let x=e.clientX-rect.left-offsetX;
-  let y=e.clientY-rect.top-offsetY;
-
-  /* SAFE BOUNDARY */
-  if(x<0) x=0;
-  if(y<0) y=0;
-  if(x>280) x=280;
-  if(y>520) y=520;
-
-  active.style.left=x+"px";
-  active.style.top=y+"px";
-  active.style.transform="none";
-}
-
-function stop(){
-  active=null;
-  document.onmousemove=null;
-}
-
-/* 📸 DOWNLOAD */
+/* 📸 DOWNLOAD PNG */
 function downloadCard(){
 
-  let card=document.querySelector(".card");
+  let card = document.querySelector(".card");
 
   html2canvas(card,{scale:2}).then(canvas=>{
-    let a=document.createElement("a");
-    a.download="eid-pro.png";
-    a.href=canvas.toDataURL();
+    let a = document.createElement("a");
+    a.download = "eid-greeting.png";
+    a.href = canvas.toDataURL();
     a.click();
   });
 }
