@@ -2,38 +2,44 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Eid Generator PRO</title>
+<title>Eid Generator PRO HD</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-<!-- FONTS -->
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
 
 <style>
+
+/* 🔥 FULL CENTER PAGE */
 body{
   margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;   /* X center */
+  align-items:center;       /* Y center */
+  flex-direction:column;
   font-family:Segoe UI;
   background:#0c1a1a;
   color:white;
-  text-align:center;
 }
 
-/* HOME SCREEN */
+/* BIG FIRST SCREEN */
 .header{
-  padding:50px 20px;
+  text-align:center;
+  margin-bottom:20px;
 }
 
 h1{
-  font-size:34px;
+  font-size:42px;   /* 🔥 BIGGER */
   margin-bottom:10px;
 }
 
 input{
-  width:85%;
-  max-width:420px;
-  padding:18px;
-  font-size:20px;
+  width:90%;
+  max-width:450px;
+  padding:20px;
+  font-size:22px;
   border-radius:12px;
   border:none;
   text-align:center;
@@ -41,8 +47,8 @@ input{
 
 .generate{
   margin-top:15px;
-  padding:14px 25px;
-  font-size:18px;
+  padding:16px 30px;
+  font-size:20px;
   border:none;
   border-radius:10px;
   background:gold;
@@ -69,10 +75,10 @@ input{
   background:rgba(0,0,0,0.35);
 }
 
-/* NAME */
+/* 🔥 NAME (MORE UP NOW) */
 .name{
   position:absolute;
-  bottom:70px;
+  bottom:110px;   /* 🔥 moved UP */
   left:50%;
   transform:translateX(-50%);
   font-size:26px;
@@ -83,9 +89,9 @@ input{
   width:90%;
 }
 
-/* ARABIC (AMIRI) */
+/* ARABIC */
 .arabic{
-  font-family:'Amiri', serif; /* ✅ TRADITIONAL ARABIC */
+  font-family:'Amiri', serif;
   direction:rtl;
   font-size:30px;
 }
@@ -128,12 +134,13 @@ button{
   background:#25D366;
   color:white;
 }
+
 </style>
 </head>
 
 <body>
 
-<!-- HOME SCREEN -->
+<!-- 🔥 CENTER FIRST SCREEN -->
 <div class="header">
   <h1>🌙 Eid Generator PRO</h1>
   <p>Apna naam likhein</p>
@@ -149,7 +156,7 @@ button{
 
 <script>
 
-/* DETECTION */
+/* LANGUAGE DETECTION */
 function isArabic(text){
   return /[\u0600-\u06FF]/.test(text);
 }
@@ -176,7 +183,6 @@ function generate(){
 
     let fontClass="name";
 
-    /* 🔥 PRIORITY FIX */
     if(isArabic(name)){
       fontClass="name arabic";
     }
@@ -218,47 +224,51 @@ function generate(){
   document.getElementById("output").innerHTML=html;
 }
 
-/* DOWNLOAD */
+/* 🔥 HD DOWNLOAD UPGRADED */
 function downloadCard(id){
-  html2canvas(document.getElementById(id)).then(canvas=>{
+
+  html2canvas(document.getElementById(id), {
+    scale: 4,               // 🔥 SUPER HD
+    useCORS: true,
+    allowTaint: true,
+    backgroundColor: null
+  }).then(canvas=>{
+
     let a=document.createElement("a");
-    a.download="eid-card.png";
-    a.href=canvas.toDataURL("image/png");
+    a.download="eid-card-hd.png";
+    a.href=canvas.toDataURL("image/png",1.0);
     a.click();
+
   });
+
 }
 
-/* SHARE SHEET */
+/* SHARE */
 async function shareImage(id){
 
   let card=document.getElementById(id);
 
-  let canvas=await html2canvas(card);
+  let canvas=await html2canvas(card,{scale:3});
 
-  canvas.toBlob(async (blob)=>{
+  canvas.toBlob(async(blob)=>{
 
-    let file=new File([blob],"eid-card.png",{type:"image/png"});
+    let file=new File([blob],"eid.png",{type:"image/png"});
 
-    if(navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
+    if(navigator.share && navigator.canShare({files:[file]})){
 
-      try{
-        await navigator.share({
-          title:"Eid Mubarak",
-          text:"🌙 Eid Mubarak",
-          files:[file]
-        });
-      }catch(e){
-        console.log("Share cancelled");
-      }
+      await navigator.share({
+        title:"Eid Mubarak",
+        text:"🌙 Eid Mubarak",
+        files:[file]
+      });
 
     }else{
 
       let a=document.createElement("a");
       a.href=URL.createObjectURL(blob);
-      a.download="eid-card.png";
+      a.download="eid.png";
       a.click();
 
-      alert("Device share supported nahi hai");
     }
 
   });
