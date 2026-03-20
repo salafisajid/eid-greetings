@@ -148,7 +148,7 @@ function generate(){
         </button>
 
         <button class="share" onclick="shareImage('card${i}')">
-          Share Image
+          Share
         </button>
       </div>
 
@@ -168,37 +168,38 @@ function downloadCard(id){
   });
 }
 
-/* 📲 REAL IMAGE SHARE */
+/* 📲 REAL MOBILE SHARE SHEET */
 async function shareImage(id){
 
   let card=document.getElementById(id);
 
-  let canvas=await html2canvas(card);
+  let canvas = await html2canvas(card);
 
-  canvas.toBlob(async function(blob){
+  canvas.toBlob(async (blob)=>{
 
-    let file=new File([blob],"eid-card.png",{type:"image/png"});
+    let file = new File([blob], "eid-card.png", { type: "image/png" });
 
-    if(navigator.canShare && navigator.canShare({files:[file]})){
+    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
 
-      try{
+      try {
         await navigator.share({
-          title:"Eid Mubarak",
-          text:"🌙 Eid Mubarak from Kulliyatur Raashidatil Islamiyah",
-          files:[file]
+          title: "Eid Mubarak",
+          text: "🌙 Eid Mubarak",
+          files: [file]
         });
-      }catch(e){
-        alert("Sharing cancelled");
+      } catch (e) {
+        console.log("Share cancelled");
       }
 
-    }else{
+    } else {
 
-      let a=document.createElement("a");
-      a.href=URL.createObjectURL(blob);
-      a.download="eid-card.png";
+      // fallback download
+      let a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "eid-card.png";
       a.click();
 
-      alert("Device share support nahi karta, image download ho gayi");
+      alert("Mobile device par open karein for proper share menu");
     }
 
   });
