@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Eid Greeting FULL PRO</title>
+<title>Eid Greeting FULL PRO FIX</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
@@ -17,6 +17,7 @@ body{
 input,button{
   padding:10px;
   margin:5px;
+  cursor:pointer;
 }
 
 .card{
@@ -46,7 +47,6 @@ input,button{
   color:#FFD700;
   text-shadow:2px 2px 6px black;
   text-align:center;
-  max-width:90%;
 }
 
 .website{
@@ -62,10 +62,13 @@ input,button{
 
 <body>
 
-<h2>🌙 Eid Greeting FULL PRO</h2>
+<h2>🌙 Eid Greeting FULL PRO FIX</h2>
 
 <input id="name" placeholder="Apna naam likhein">
+
 <button onclick="generate()">Generate</button>
+
+<!-- ✅ DOWNLOAD BUTTON RESTORED -->
 <button onclick="downloadCard()">Download PNG</button>
 
 <div id="output"></div>
@@ -74,53 +77,34 @@ input,button{
 
 /* FONT SIZE AUTO */
 function getFontSize(name){
-  if(name.length < 10) return "28px";
-  if(name.length < 20) return "24px";
-  if(name.length < 30) return "20px";
-  return "18px";
+  if(name.length < 10) return 28;
+  if(name.length < 20) return 24;
+  if(name.length < 30) return 20;
+  return 18;
 }
 
-/* 🚀 GENERATE */
+/* GENERATE */
 function generate(){
 
-  let name=document.getElementById("name").value.trim();
+  let name = document.getElementById("name").value.trim();
   if(!name) return alert("Naam likhein");
 
-  let size=getFontSize(name);
+  let size = getFontSize(name);
 
-  let designs=[
+  let designs = [
 
-    /* ⚫ BLACK (TOP MOST) */
-    {
-      bg:"black.jpg",
-      top:"20px"
-    },
-
-    /* 🔵 BLUE (THODA NEECHE) */
-    {
-      bg:"blue.jpg",
-      top:"90px"
-    },
-
-    /* 🟢 GREEN (AUR NEECHE) */
-    {
-      bg:"green.jpg",
-      top:"85px"
-    },
-
-    /* 🕌 MOSQUE (SAB SE NEECHE) */
-    {
-      bg:"mosque.jpg",
-      top:"150px"
-    }
+    { bg:"black.jpg", top:"20px" },
+    { bg:"blue.jpg", top:"90px" },
+    { bg:"green.jpg", top:"110px" },
+    { bg:"mosque.jpg", top:"150px" }
 
   ];
 
-  let html="";
+  let html = "";
 
-  designs.forEach(d=>{
+  designs.forEach(d => {
 
-    html+=`
+    html += `
     <div class="card" style="background-image:url('${d.bg}')">
 
       <img src="logo.png" class="logo">
@@ -134,18 +118,23 @@ function generate(){
     </div>`;
   });
 
-  document.getElementById("output").innerHTML=html;
+  document.getElementById("output").innerHTML = html;
 }
 
-/* 📸 DOWNLOAD PNG */
+/* DOWNLOAD FUNCTION */
 function downloadCard(){
 
-  let card=document.querySelector(".card");
+  let card = document.querySelector(".card");
+
+  if(!card){
+    alert("Pehle Generate karein");
+    return;
+  }
 
   html2canvas(card,{scale:2}).then(canvas=>{
-    let a=document.createElement("a");
-    a.download="eid-full-pro.png";
-    a.href=canvas.toDataURL();
+    let a = document.createElement("a");
+    a.download = "eid-greeting.png";
+    a.href = canvas.toDataURL();
     a.click();
   });
 }
