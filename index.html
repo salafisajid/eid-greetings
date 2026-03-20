@@ -19,7 +19,7 @@ body{
   text-align:center;
 }
 
-/* 🔥 BIG HOME SCREEN */
+/* HOME SCREEN */
 .header{
   padding:50px 20px;
 }
@@ -62,7 +62,7 @@ input{
   overflow:hidden;
 }
 
-/* DARK OVERLAY */
+/* OVERLAY */
 .overlay{
   position:absolute;
   inset:0;
@@ -72,7 +72,7 @@ input{
 /* NAME */
 .name{
   position:absolute;
-  bottom:70px;   /* 👈 slightly up */
+  bottom:70px;
   left:50%;
   transform:translateX(-50%);
   font-size:26px;
@@ -83,9 +83,9 @@ input{
   width:90%;
 }
 
-/* ARABIC */
+/* ARABIC (AMIRI) */
 .arabic{
-  font-family:'Amiri', serif;
+  font-family:'Amiri', serif; /* ✅ TRADITIONAL ARABIC */
   direction:rtl;
   font-size:30px;
 }
@@ -133,7 +133,7 @@ button{
 
 <body>
 
-<!-- HOME -->
+<!-- HOME SCREEN -->
 <div class="header">
   <h1>🌙 Eid Generator PRO</h1>
   <p>Apna naam likhein</p>
@@ -149,7 +149,7 @@ button{
 
 <script>
 
-/* LANGUAGE DETECTION */
+/* DETECTION */
 function isArabic(text){
   return /[\u0600-\u06FF]/.test(text);
 }
@@ -176,11 +176,12 @@ function generate(){
 
     let fontClass="name";
 
-    if(isUrdu(name)){
-      fontClass="name urdu";
-    }
-    else if(isArabic(name)){
+    /* 🔥 PRIORITY FIX */
+    if(isArabic(name)){
       fontClass="name arabic";
+    }
+    else if(isUrdu(name)){
+      fontClass="name urdu";
     }
 
     html+=`
@@ -227,7 +228,7 @@ function downloadCard(id){
   });
 }
 
-/* SHARE (mobile share sheet) */
+/* SHARE SHEET */
 async function shareImage(id){
 
   let card=document.getElementById(id);
@@ -257,7 +258,7 @@ async function shareImage(id){
       a.download="eid-card.png";
       a.click();
 
-      alert("Share supported device required");
+      alert("Device share supported nahi hai");
     }
 
   });
