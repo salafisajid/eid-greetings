@@ -6,6 +6,10 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
+<!-- FONTS -->
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
+
 <style>
 body{
   margin:0;
@@ -15,9 +19,9 @@ body{
   text-align:center;
 }
 
-/* 🔥 BIG FIRST SCREEN */
+/* 🔥 BIG HOME SCREEN */
 .header{
-  padding:40px 20px;
+  padding:50px 20px;
 }
 
 h1{
@@ -26,8 +30,8 @@ h1{
 }
 
 input{
-  width:80%;
-  max-width:400px;
+  width:85%;
+  max-width:420px;
   padding:18px;
   font-size:20px;
   border-radius:12px;
@@ -46,7 +50,7 @@ input{
   font-weight:bold;
 }
 
-/* CARDS */
+/* CARD */
 .card{
   width:320px;
   height:560px;
@@ -65,19 +69,35 @@ input{
   background:rgba(0,0,0,0.35);
 }
 
-/* NAME BOTTOM CENTER */
+/* NAME */
 .name{
   position:absolute;
-  bottom:35px;
+  bottom:70px;   /* 👈 slightly up */
   left:50%;
   transform:translateX(-50%);
   font-size:26px;
   font-weight:bold;
   color:#FFD700;
   text-shadow:2px 2px 6px black;
+  text-align:center;
+  width:90%;
 }
 
-/* LOGO BOTTOM LEFT */
+/* ARABIC */
+.arabic{
+  font-family:'Amiri', serif;
+  direction:rtl;
+  font-size:30px;
+}
+
+/* URDU */
+.urdu{
+  font-family:'Noto Nastaliq Urdu', serif;
+  direction:rtl;
+  font-size:28px;
+}
+
+/* LOGO */
 .logo{
   position:absolute;
   bottom:15px;
@@ -113,9 +133,9 @@ button{
 
 <body>
 
-<!-- 🔥 BIG FIRST SCREEN -->
+<!-- HOME -->
 <div class="header">
-  <h1>🌙 Eid Generator</h1>
+  <h1>🌙 Eid Generator PRO</h1>
   <p>Apna naam likhein</p>
 
   <input id="name" placeholder="Enter your name">
@@ -129,6 +149,16 @@ button{
 
 <script>
 
+/* LANGUAGE DETECTION */
+function isArabic(text){
+  return /[\u0600-\u06FF]/.test(text);
+}
+
+function isUrdu(text){
+  return /[\u0600-\u06FF\u0750-\u077F]/.test(text);
+}
+
+/* GENERATE */
 function generate(){
 
   let name=document.getElementById("name").value.trim();
@@ -144,6 +174,15 @@ function generate(){
 
   designs.forEach((bg,i)=>{
 
+    let fontClass="name";
+
+    if(isUrdu(name)){
+      fontClass="name urdu";
+    }
+    else if(isArabic(name)){
+      fontClass="name arabic";
+    }
+
     html+=`
     <div>
 
@@ -153,7 +192,7 @@ function generate(){
 
           <img src="logo.png" class="logo">
 
-          <div class="name">${name}</div>
+          <div class="${fontClass}">${name}</div>
 
         </div>
 
@@ -173,7 +212,6 @@ function generate(){
 
     </div>
     `;
-
   });
 
   document.getElementById("output").innerHTML=html;
@@ -198,24 +236,28 @@ async function shareImage(id){
 
   canvas.toBlob(async (blob)=>{
 
-    let file=new File([blob],"eid.png",{type:"image/png"});
+    let file=new File([blob],"eid-card.png",{type:"image/png"});
 
     if(navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
 
-      await navigator.share({
-        title:"Eid Mubarak",
-        text:"🌙 Eid Mubarak",
-        files:[file]
-      });
+      try{
+        await navigator.share({
+          title:"Eid Mubarak",
+          text:"🌙 Eid Mubarak",
+          files:[file]
+        });
+      }catch(e){
+        console.log("Share cancelled");
+      }
 
     }else{
 
       let a=document.createElement("a");
       a.href=URL.createObjectURL(blob);
-      a.download="eid.png";
+      a.download="eid-card.png";
       a.click();
 
-      alert("Share not supported, image downloaded");
+      alert("Share supported device required");
     }
 
   });
