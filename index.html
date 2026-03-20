@@ -6,7 +6,6 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-<!-- FONTS -->
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
 
@@ -19,7 +18,7 @@ body{
   text-align:center;
 }
 
-/* ===== BIG HOME SCREEN ===== */
+/* HOME */
 .header{
   min-height:100vh;
   display:flex;
@@ -56,13 +55,11 @@ input{
   cursor:pointer;
 }
 
-/* CONTACT BELOW BUTTON */
 .info{
   margin-top:25px;
   font-size:22px;
-  font-weight:600;
-  line-height:1.8;
   color:#FFD700;
+  line-height:1.8;
 }
 
 /* CARD */
@@ -83,7 +80,6 @@ input{
   background:rgba(0,0,0,0.35);
 }
 
-/* NAME */
 .name{
   position:absolute;
   bottom:120px;
@@ -92,25 +88,21 @@ input{
   font-size:28px;
   font-weight:bold;
   color:#FFD700;
-  text-shadow:2px 2px 6px black;
   width:90%;
 }
 
-/* ARABIC */
 .arabic{
   font-family:'Amiri', serif;
   direction:rtl;
   font-size:32px;
 }
 
-/* URDU */
 .urdu{
   font-family:'Noto Nastaliq Urdu', serif;
   direction:rtl;
   font-size:30px;
 }
 
-/* LOGO */
 .logo{
   position:absolute;
   bottom:15px;
@@ -118,7 +110,6 @@ input{
   width:60px;
 }
 
-/* BUTTONS */
 .actions button{
   padding:10px 16px;
   margin:5px;
@@ -128,34 +119,26 @@ input{
   cursor:pointer;
 }
 
-.download{
-  background:green;
-  color:white;
-}
-
-.share{
-  background:#25D366;
-  color:white;
-}
+.download{background:green;color:white;}
+.share{background:#25D366;color:white;}
 </style>
 </head>
 
 <body>
 
-<!-- HOME SCREEN -->
-<div class="header">
+<!-- HOME PAGE -->
+<div class="header" id="home">
 
   <h1>🌙 Eid Mubarak</h1>
 
-  <p style="font-size:24px; font-weight:600;">
+  <p style="font-size:24px;font-weight:600;">
     KULLIYATUR RASHIDAATIL ISLAMIYAH
   </p>
 
   <input id="name" placeholder="Apna naam likhein">
 
-  <button class="generate" onclick="generate()">Generate Cards</button>
+  <button class="generate" onclick="openCards()">Generate Cards</button>
 
-  <!-- BIG INFO BELOW BUTTON -->
   <div class="info">
     📞 +91 87791 22931<br>
     🌐 www.raashidiyah.com
@@ -163,12 +146,11 @@ input{
 
 </div>
 
-<!-- OUTPUT -->
-<div id="output"></div>
+<!-- CARDS PAGE -->
+<div id="cardsPage" style="display:none;"></div>
 
 <script>
 
-/* CHECK LANGUAGE */
 function isArabic(text){
   return /[\u0600-\u06FF]/.test(text);
 }
@@ -176,11 +158,14 @@ function isUrdu(text){
   return /[\u0600-\u06FF\u0750-\u077F]/.test(text);
 }
 
-/* GENERATE */
-function generate(){
+/* OPEN NEW PAGE VIEW (SAME TAB) */
+function openCards(){
 
   let name=document.getElementById("name").value.trim();
   if(!name) return alert("Naam likhein");
+
+  document.getElementById("home").style.display="none";
+  document.getElementById("cardsPage").style.display="block";
 
   let designs=["eid.jpg","eid2.jpg","pink.jpg"];
 
@@ -209,39 +194,33 @@ function generate(){
     `;
   });
 
-  document.getElementById("output").innerHTML=html;
+  document.getElementById("cardsPage").innerHTML=html;
 }
 
-/* HD DOWNLOAD */
+/* DOWNLOAD */
 function downloadCard(id){
-  let element=document.getElementById(id);
+  let el=document.getElementById(id);
 
-  html2canvas(element,{
-    scale:3,
-    useCORS:true,
-    backgroundColor:null
-  }).then(canvas=>{
+  html2canvas(el,{scale:3,useCORS:true}).then(canvas=>{
     let a=document.createElement("a");
-    a.download="eid-card-hd.png";
-    a.href=canvas.toDataURL("image/png",1.0);
+    a.download="eid-card.png";
+    a.href=canvas.toDataURL("image/png");
     a.click();
   });
 }
 
 /* SHARE */
 async function shareImage(id){
-  let card=document.getElementById(id);
 
-  let canvas=await html2canvas(card,{
-    scale:3,
-    useCORS:true
-  });
+  let el=document.getElementById(id);
 
-  canvas.toBlob(async (blob)=>{
+  let canvas=await html2canvas(el,{scale:3,useCORS:true});
+
+  canvas.toBlob(async(blob)=>{
 
     let file=new File([blob],"eid.png",{type:"image/png"});
 
-    if(navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
+    if(navigator.share && navigator.canShare({files:[file]})){
       await navigator.share({
         title:"Eid Mubarak",
         text:"🌙 Eid Mubarak",
