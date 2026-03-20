@@ -171,28 +171,34 @@ function openCards(){
 
   let html="";
 
-  designs.forEach((bg,i)=>{
+designs.forEach((bg,i)=>{
 
-    let fontClass="name";
-    if(isArabic(name)) fontClass="name arabic";
-    else if(isUrdu(name)) fontClass="name urdu";
+  let fontClass="name";
+  if(isArabic(name)) fontClass="name arabic";
+  else if(isUrdu(name)) fontClass="name urdu";
 
-    html+=`
-    <div>
-      <div class="card" id="card${i}" style="background-image:url('${bg}')">
-        <div class="overlay">
-          <img src="logo.png" class="logo">
-          <div class="${fontClass}">${name}</div>
-        </div>
-      </div>
+  // 🔥 ONLY MASJID IMAGE SPECIAL ADJUSTMENT
+  let extraStyle = "";
+  if(bg === "masjid.jpg"){
+    extraStyle = "style='bottom:150px;'"; // normal 120px se 30px upar
+  }
 
-      <div class="actions">
-        <button class="download" onclick="downloadCard('card${i}')">Download</button>
-        <button class="share" onclick="shareImage('card${i}')">Share</button>
+  html+=`
+  <div>
+    <div class="card" id="card${i}" style="background-image:url('${bg}')">
+      <div class="overlay">
+        <img src="logo.png" class="logo">
+        <div class="${fontClass}" ${extraStyle}>${name}</div>
       </div>
     </div>
-    `;
-  });
+
+    <div class="actions">
+      <button class="download" onclick="downloadCard('card${i}')">Download</button>
+      <button class="share" onclick="shareImage('card${i}')">Share</button>
+    </div>
+  </div>
+  `;
+});
 
   document.getElementById("cardsPage").innerHTML=html;
 }
