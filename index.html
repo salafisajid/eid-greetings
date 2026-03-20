@@ -2,9 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Eid Greeting PRO MAX</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&display=swap" rel="stylesheet">
+<title>Eid Greeting PRO MAX FINAL</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
@@ -16,15 +14,12 @@ body{
   font-family:Segoe UI;
 }
 
-.controls{
-  margin:10px;
-}
-
-input, button{
+input,button{
   padding:10px;
   margin:5px;
 }
 
+/* 📱 MAIN CARD */
 .card{
   position:relative;
   width:320px;
@@ -34,92 +29,88 @@ input, button{
   background-size:cover;
   background-position:center;
   overflow:hidden;
-  box-shadow:0 10px 25px rgba(0,0,0,0.5);
+  box-shadow:0 10px 25px rgba(0,0,0,0.6);
 }
 
-/* DRAGGABLE ITEMS */
-.logo, .name{
+/* DRAG ITEMS */
+.item{
   position:absolute;
   cursor:grab;
   user-select:none;
 }
 
+/* LOGO */
 .logo{
-  width:65px;
+  width:60px;
 }
 
+/* NAME */
 .name{
   color:#FFD700;
   font-weight:bold;
   text-shadow:2px 2px 6px black;
-  font-size:24px;
-  max-width:80%;
+  max-width:85%;
   text-align:center;
 }
 
+/* WEBSITE */
 .website{
   position:absolute;
   bottom:10px;
   right:12px;
   font-size:11px;
   color:yellow;
+  opacity:0.9;
 }
 </style>
 </head>
 
 <body>
 
-<h2>🌙 Eid Greeting PRO MAX</h2>
+<h2>🌙 Eid Greeting PRO MAX FINAL</h2>
 
-<div class="controls">
 <input id="name" placeholder="Apna naam likhein">
 <button onclick="generate()">Generate</button>
 <button onclick="downloadCard()">Download PNG</button>
-</div>
 
 <div id="output"></div>
 
 <script>
 
-let activeDrag = null;
-let offsetX = 0;
-let offsetY = 0;
+let active=null,offsetX=0,offsetY=0;
 
-/* 🧠 NAME FORMAT */
-function formatName(name){
-  let words = name.trim().split(" ");
-  return words.join("<br>");
-}
-
-/* 📏 FONT SIZE AUTO */
-function getFontSize(name){
-  if(name.length < 10) return 28;
-  if(name.length < 20) return 24;
-  if(name.length < 30) return 20;
-  return 18;
+/* 🧠 FONT AUTO SIZE */
+function fontSize(name){
+  if(name.length<10) return "28px";
+  if(name.length<20) return "24px";
+  if(name.length<30) return "20px";
+  return "18px";
 }
 
 /* 🚀 GENERATE */
 function generate(){
 
-  let name = document.getElementById("name").value.trim();
+  let name=document.getElementById("name").value.trim();
   if(!name) return alert("Naam likhein");
 
-  let html = "";
+  let designs=["blue.jpg","green.jpg","black.jpg","mosque.jpg"];
 
-  let designs = ["blue.jpg","green.jpg","black.jpg","mosque.jpg"];
+  let html="";
 
-  designs.forEach(bg => {
+  designs.forEach(bg=>{
 
-    html += `
+    html+=`
     <div class="card" style="background-image:url('${bg}')">
 
-      <img src="logo.png" class="logo drag" style="left:15px;bottom:15px;" onmousedown="startDrag(event)">
-      
-      <div class="name drag"
-        style="left:50%; top:60%; transform:translateX(-50%); font-size:${getFontSize(name)}px;"
-        onmousedown="startDrag(event)">
-        ${formatName(name)}
+      <img src="logo.png"
+        class="item logo"
+        style="left:15px;bottom:15px;"
+        onmousedown="dragStart(event)">
+
+      <div class="item name"
+        style="left:50%;top:60%;transform:translateX(-50%);font-size:${fontSize(name)};"
+        onmousedown="dragStart(event)">
+        ${name}
       </div>
 
       <div class="website">www.raashidiyah.com</div>
@@ -127,46 +118,53 @@ function generate(){
     </div>`;
   });
 
-  document.getElementById("output").innerHTML = html;
+  document.getElementById("output").innerHTML=html;
 }
 
-/* 🖱️ DRAG SYSTEM */
-function startDrag(e){
-  activeDrag = e.target;
-  offsetX = e.offsetX;
-  offsetY = e.offsetY;
-  document.onmousemove = drag;
-  document.onmouseup = stopDrag;
+/* 🖱️ DRAG SYSTEM (SAFE) */
+function dragStart(e){
+  active=e.target;
+  offsetX=e.offsetX;
+  offsetY=e.offsetY;
+  document.onmousemove=drag;
+  document.onmouseup=stop;
 }
 
 function drag(e){
-  if(!activeDrag) return;
+  if(!active) return;
 
-  let parent = activeDrag.parentElement;
-  let rect = parent.getBoundingClientRect();
+  let parent=active.parentElement;
+  let rect=parent.getBoundingClientRect();
 
-  let x = e.clientX - rect.left - offsetX;
-  let y = e.clientY - rect.top - offsetY;
+  let x=e.clientX-rect.left-offsetX;
+  let y=e.clientY-rect.top-offsetY;
 
-  activeDrag.style.left = x + "px";
-  activeDrag.style.top = y + "px";
-  activeDrag.style.transform = "none";
+  /* SAFE BOUNDARY */
+  if(x<0) x=0;
+  if(y<0) y=0;
+  if(x>280) x=280;
+  if(y>520) y=520;
+
+  active.style.left=x+"px";
+  active.style.top=y+"px";
+  active.style.transform="none";
 }
 
-function stopDrag(){
-  activeDrag = null;
-  document.onmousemove = null;
+function stop(){
+  active=null;
+  document.onmousemove=null;
 }
 
-/* 📸 DOWNLOAD PNG */
+/* 📸 DOWNLOAD */
 function downloadCard(){
-  let card = document.querySelector(".card");
 
-  html2canvas(card, {scale:2}).then(canvas => {
-    let link = document.createElement("a");
-    link.download = "eid-card.png";
-    link.href = canvas.toDataURL();
-    link.click();
+  let card=document.querySelector(".card");
+
+  html2canvas(card,{scale:2}).then(canvas=>{
+    let a=document.createElement("a");
+    a.download="eid-pro.png";
+    a.href=canvas.toDataURL();
+    a.click();
   });
 }
 
