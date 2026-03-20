@@ -35,10 +35,6 @@ button{
   background:gold;
 }
 
-.actions{
-  margin-top:5px;
-}
-
 .download{
   background:green;
   color:white;
@@ -100,7 +96,7 @@ button{
 
 <body>
 
-<h2>🌙 Eid Vertical Generator PRO</h2>
+<h2>🌙 Vertical Eid Generator PRO</h2>
 
 <input id="name" placeholder="Apna naam likhein">
 <br>
@@ -130,6 +126,7 @@ function generate(){
     html+=`
     <div>
 
+      <!-- CARD -->
       <div class="card" id="card${i}" style="background-image:url('${bg}')">
 
         <div class="overlay">
@@ -144,16 +141,15 @@ function generate(){
 
       </div>
 
-      <div class="actions">
-
+      <!-- BUTTONS -->
+      <div>
         <button class="download" onclick="downloadCard('card${i}')">
           Download
         </button>
 
-        <button class="share" onclick="shareWhatsApp('${name}')">
-          WhatsApp
+        <button class="share" onclick="shareImage('card${i}')">
+          Share Image
         </button>
-
       </div>
 
     </div>`;
@@ -162,21 +158,51 @@ function generate(){
   document.getElementById("output").innerHTML=html;
 }
 
-/* DOWNLOAD */
+/* 📥 DOWNLOAD */
 function downloadCard(id){
   html2canvas(document.getElementById(id)).then(canvas=>{
     let a=document.createElement("a");
-    a.download="eid-vertical.png";
+    a.download="eid-card.png";
     a.href=canvas.toDataURL("image/png");
     a.click();
   });
 }
 
-/* SHARE */
-function shareWhatsApp(name){
-  let text=`🌙 Eid Mubarak from ${name}\nKulliyatur Raashidatil Islamiyah`;
-  let url="https://wa.me/?text="+encodeURIComponent(text);
-  window.open(url,"_blank");
+/* 📲 REAL IMAGE SHARE */
+async function shareImage(id){
+
+  let card=document.getElementById(id);
+
+  let canvas=await html2canvas(card);
+
+  canvas.toBlob(async function(blob){
+
+    let file=new File([blob],"eid-card.png",{type:"image/png"});
+
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+
+      try{
+        await navigator.share({
+          title:"Eid Mubarak",
+          text:"🌙 Eid Mubarak from Kulliyatur Raashidatil Islamiyah",
+          files:[file]
+        });
+      }catch(e){
+        alert("Sharing cancelled");
+      }
+
+    }else{
+
+      let a=document.createElement("a");
+      a.href=URL.createObjectURL(blob);
+      a.download="eid-card.png";
+      a.click();
+
+      alert("Device share support nahi karta, image download ho gayi");
+    }
+
+  });
+
 }
 
 </script>
