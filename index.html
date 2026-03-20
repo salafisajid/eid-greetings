@@ -11,7 +11,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
 
 <style>
-/* BODY CENTERED */
 body{
   margin:0;
   font-family:Segoe UI;
@@ -25,24 +24,25 @@ body{
   text-align:center;
 }
 
-/* HOME SCREEN */
+/* FIRST SCREEN */
 .header{
-  padding:50px 20px;
+  padding:60px 20px;
 }
 
 h1{
-  font-size:40px;
-  margin-bottom:15px;
+  font-size:42px;
+  margin-bottom:10px;
 }
 
 input{
-  width:85%;
-  max-width:450px;
-  padding:20px;
-  font-size:22px;
+  width:90%;
+  max-width:500px;
+  padding:22px;
+  font-size:24px;
   border-radius:12px;
   border:none;
   text-align:center;
+  margin-top:10px;
 }
 
 .generate{
@@ -68,7 +68,6 @@ input{
   overflow:hidden;
 }
 
-/* OVERLAY */
 .overlay{
   position:absolute;
   inset:0;
@@ -78,15 +77,15 @@ input{
 /* NAME */
 .name{
   position:absolute;
-  bottom:120px;   /* 👈 NAME THODA AUR UPPER */
+  bottom:120px;
   left:50%;
   transform:translateX(-50%);
   font-size:28px;
   font-weight:bold;
   color:#FFD700;
   text-shadow:2px 2px 6px black;
-  text-align:center;
   width:90%;
+  text-align:center;
 }
 
 /* ARABIC */
@@ -141,19 +140,33 @@ button{
 
 <!-- HOME SCREEN -->
 <div class="header">
-  <h1>🌙 Eid Generator PRO</h1>
-  <p>Apna naam likhein</p>
 
-  <input id="name" placeholder="Enter your name">
-  <br>
+  <h1>🌙 Eid Mubarak</h1>
+
+  <p style="font-size:18px; margin-top:-5px;">
+    KULLIYATUR RASHIDAATIL ISLAMIYAH
+  </p>
+
+  <p style="font-size:16px; color:#FFD700;">
+    📞 +91 87791 22931
+  </p>
+
+  <input id="name" placeholder="Apna naam likhein">
+
+  <p style="font-size:14px; margin-top:8px; opacity:0.8;">
+    www.raashidiyah.com
+  </p>
+
   <button class="generate" onclick="generate()">Generate Cards</button>
+
 </div>
 
 <!-- OUTPUT -->
 <div id="output"></div>
 
 <script>
-/* LANGUAGE DETECTION */
+
+/* LANGUAGE CHECK */
 function isArabic(text){
   return /[\u0600-\u06FF]/.test(text);
 }
@@ -163,18 +176,16 @@ function isUrdu(text){
 
 /* GENERATE */
 function generate(){
+
   let name=document.getElementById("name").value.trim();
   if(!name) return alert("Naam likhein");
 
-  let designs=[
-    "eid.jpg",
-    "eid2.jpg",
-    "pink.jpg"
-  ];
+  let designs=["eid.jpg","eid2.jpg","pink.jpg"];
 
   let html="";
 
   designs.forEach((bg,i)=>{
+
     let fontClass="name";
     if(isArabic(name)) fontClass="name arabic";
     else if(isUrdu(name)) fontClass="name urdu";
@@ -187,6 +198,7 @@ function generate(){
           <div class="${fontClass}">${name}</div>
         </div>
       </div>
+
       <div class="actions">
         <button class="download" onclick="downloadCard('card${i}')">Download</button>
         <button class="share" onclick="shareImage('card${i}')">Share</button>
@@ -198,11 +210,12 @@ function generate(){
   document.getElementById("output").innerHTML=html;
 }
 
-/* DOWNLOAD HD */
+/* HD DOWNLOAD */
 function downloadCard(id){
   let element=document.getElementById(id);
+
   html2canvas(element,{
-    scale:3,               // HD quality
+    scale:3,
     useCORS:true,
     allowTaint:true,
     backgroundColor:null
@@ -214,12 +227,20 @@ function downloadCard(id){
   });
 }
 
-/* SHARE MOBILE SHEET */
+/* NATIVE SHARE (ALL APPS) */
 async function shareImage(id){
   let card=document.getElementById(id);
-  let canvas=await html2canvas(card,{scale:3, useCORS:true, backgroundColor:null});
+
+  let canvas=await html2canvas(card,{
+    scale:3,
+    useCORS:true,
+    backgroundColor:null
+  });
+
   canvas.toBlob(async (blob)=>{
-    let file=new File([blob],"eid-card.png",{type:"image/png"});
+
+    let file=new File([blob],"eid.png",{type:"image/png"});
+
     if(navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
       try{
         await navigator.share({
@@ -227,18 +248,19 @@ async function shareImage(id){
           text:"🌙 Eid Mubarak",
           files:[file]
         });
-      }catch(e){
-        console.log("Share cancelled");
-      }
+      }catch(e){}
     }else{
       let a=document.createElement("a");
       a.href=URL.createObjectURL(blob);
-      a.download="eid-card.png";
+      a.download="eid.png";
       a.click();
-      alert("Device share supported nahi hai, image download ho gayi");
+      alert("Share supported nahi hai, image download ho gayi");
     }
+
   });
+
 }
+
 </script>
 
 </body>
